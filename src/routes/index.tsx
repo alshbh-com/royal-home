@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { ArrowRight, Flame } from "lucide-react";
 import royalLogo from "@/assets/royal-logo.jpg";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +9,16 @@ import type { Tables } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
+  loader: async () => {
+    const [{ data: p }, { data: b }] = await Promise.all([
+      supabase.from("products").select("*").eq("is_active", true).order("created_at", { ascending: false }).limit(20),
+      supabase.from("banners").select("*").eq("is_active", true).eq("position", "hero").order("sort_order"),
+    ]);
+    return { products: (p ?? []) as Tables<"products">[], banners: (b ?? []) as Tables<"banners">[] };
+  },
+  staleTime: 60_000,
+  errorComponent: ({ error }) => <div className="container mx-auto p-8 text-center">{error.message}</div>,
+  notFoundComponent: () => <div className="container mx-auto p-8 text-center">Not found</div>,
   head: () => ({
     meta: [
       { title: "Royal — متجر الأجهزة المنزلية الفاخر" },
@@ -20,19 +29,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { lang } = useApp();
-  const [products, setProducts] = useState<Tables<"products">[]>([]);
-  const [banners, setBanners] = useState<Tables<"banners">[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const [{ data: p }, { data: b }] = await Promise.all([
-        supabase.from("products").select("*").eq("is_active", true).order("created_at", { ascending: false }).limit(20),
-        supabase.from("banners").select("*").eq("is_active", true).eq("position", "hero").order("sort_order"),
-      ]);
-      setProducts(p ?? []);
-      setBanners(b ?? []);
-    })();
-  }, []);
+  const { products, banners } = Route.useLoaderData();
 
   const bestSellers = products.filter((p) => p.is_bestseller).slice(0, 8);
   const newArrivals = products.filter((p) => p.is_new).slice(0, 8);
