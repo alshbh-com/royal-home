@@ -56,7 +56,7 @@ export const adminLogin = createServerFn({ method: "POST" })
     });
 
     setResponseHeaders(new Headers({
-      "Set-Cookie": `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${SESSION_TTL_HOURS * 3600}`,
+      "Set-Cookie": `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=${SESSION_TTL_HOURS * 3600}`,
     }));
     return { ok: true };
   });
