@@ -104,7 +104,7 @@
   --ring: oklch(0.78 0.13 85);
 
   --gold: oklch(0.82 0.14 86);
-  --gold-foreground: oklch(0.13 0.025 265);
+  --gold-foreground: oklch(0.99 0 0); /* white text on gold in dark mode */
   --gold-glow: oklch(0.88 0.16 88);
   --success: oklch(0.72 0.18 145);
   --success-foreground: oklch(0.13 0.025 265);

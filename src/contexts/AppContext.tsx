@@ -35,13 +35,13 @@ const sameItem = (a: CartItem, b: Pick<CartItem, "productId" | "selectedColor" |
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("ar");
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const savedLang = (localStorage.getItem("royal_lang") as Lang) || "ar";
-    const savedTheme = (localStorage.getItem("royal_theme") as Theme) || "light";
+    const savedTheme = (localStorage.getItem("royal_theme") as Theme) || "dark";
     const savedCart = localStorage.getItem("royal_cart");
     setLangState(savedLang);
     setTheme(savedTheme);
