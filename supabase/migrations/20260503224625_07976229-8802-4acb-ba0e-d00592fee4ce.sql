@@ -1,0 +1,1 @@
+INSERT INTO public.admin_credentials (password_hash) VALUES ('$2b$10$.h0Na0N6e1JbTdO/kLK9eOuufoSLzsdU8cfv5LWjzY3HvfSmWCzJ.');
