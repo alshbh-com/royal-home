@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
 import { createOrder, validateCoupon } from "@/server/orders.functions";
+import { track } from "@/lib/analytics";
 import type { Tables } from "@/integrations/supabase/types";
 
 const searchSchema = z.object({ coupon: z.string().optional() });
