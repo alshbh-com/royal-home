@@ -68,7 +68,7 @@ export const adminLogout = createServerFn({ method: "POST" }).handler(async () =
     await supabaseAdmin.from("admin_sessions").delete().eq("token", token);
   }
   setResponseHeaders(new Headers({
-    "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=0`,
+    "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0`,
   }));
   return { ok: true };
 });
