@@ -54,27 +54,21 @@ export const adminLogin = createServerFn({ method: "POST" })
       ip_address: ip,
     });
 
-    setResponseHeaders(new Headers({
-      "Set-Cookie": `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=${SESSION_TTL_HOURS * 3600}`,
-    }));
+    setCookie(SESSION_COOKIE, token, COOKIE_OPTS);
     return { ok: true };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
-  const cookieHeader = getRequestHeader("cookie");
-  const token = parseCookie(cookieHeader, SESSION_COOKIE);
+  const token = getCookie(SESSION_COOKIE);
   if (token) {
     await supabaseAdmin.from("admin_sessions").delete().eq("token", token);
   }
-  setResponseHeaders(new Headers({
-    "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0`,
-  }));
+  deleteCookie(SESSION_COOKIE, { path: "/", sameSite: "none", secure: true });
   return { ok: true };
 });
 
 async function verifyAdmin(): Promise<boolean> {
-  const cookieHeader = getRequestHeader("cookie");
-  const token = parseCookie(cookieHeader, SESSION_COOKIE);
+  const token = getCookie(SESSION_COOKIE);
   if (!token) return false;
   const { data } = await supabaseAdmin
     .from("admin_sessions")
