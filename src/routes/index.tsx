@@ -31,9 +31,9 @@ function HomePage() {
   const { lang } = useApp();
   const { products, banners } = Route.useLoaderData();
 
-  const bestSellers = products.filter((p) => p.is_bestseller).slice(0, 8);
-  const newArrivals = products.filter((p) => p.is_new).slice(0, 8);
-  const featured = products.filter((p) => p.is_featured).slice(0, 8);
+  const bestSellers = products.filter((p: Tables<"products">) => p.is_bestseller).slice(0, 8);
+  const newArrivals = products.filter((p: Tables<"products">) => p.is_new).slice(0, 8);
+  const featured = products.filter((p: Tables<"products">) => p.is_featured).slice(0, 8);
   const heroBanner = banners[0];
 
   return (
