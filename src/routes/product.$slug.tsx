@@ -101,6 +101,7 @@ function ProductPage() {
           }],
         },
       });
+      track("purchase", { product_id: product.id, metadata: { order_number: result.order_number, total: result.final_price } });
       navigate({ to: "/order-success/$orderNumber", params: { orderNumber: result.order_number } });
     } catch (err: any) {
       toast.error(err?.message ?? "Error");
