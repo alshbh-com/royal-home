@@ -1,5 +1,5 @@
 import { createServerFn, createMiddleware } from "@tanstack/react-start";
-import { getRequestIP, getRequestHeader, setResponseHeaders } from "@tanstack/react-start/server";
+import { getRequestIP, getCookie, setCookie, deleteCookie } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
