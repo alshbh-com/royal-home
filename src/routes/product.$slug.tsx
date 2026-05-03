@@ -37,6 +37,7 @@ function ProductPage() {
       const { data: p } = await supabase.from("products").select("*").eq("slug", slug).eq("is_active", true).maybeSingle();
       setProduct(p ?? null);
       setImgIdx(0); setColor(undefined); setSize(undefined); setQty(1);
+      if (p) track("product_view", { product_id: p.id });
       if (p?.category_id) {
         const { data: r } = await supabase.from("products").select("*")
           .eq("is_active", true).eq("category_id", p.category_id).neq("id", p.id).limit(4);
