@@ -18,65 +18,7 @@ function CartPage() {
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
-  const [freeShipThreshold, setFreeShipThreshold] = useState(1500);
   const [validating, setValidating] = useState(false);
-
-  useEffect(() => {
-    supabase.from("settings").select("value").eq("key", "free_shipping_threshold").maybeSingle()
-      .then(({ data }) => { if (data) setFreeShipThreshold(Number(data.value)); });
-  }, []);
-
-  const apply = async () => {
-    if (!coupon.trim()) return;
-    setValidating(true);
-    try {
-      const r = await validateCoupon({ data: { code: coupon.trim(), subtotal: cartTotal } });
-      if (r.valid) {
-        setDiscount(r.discount ?? 0);
-        setAppliedCode(r.code ?? null);
-        toast.success(t(lang, "couponApplied"));
-      } else {
-        toast.error(t(lang, "couponInvalid"));
-        setDiscount(0); setAppliedCode(null);
-      }
-    } catch {
-      toast.error(t(lang, "couponInvalid"));
-    } finally { setValidating(false); }
-  };
-
-  if (cart.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-20 text-center">
-        <ShoppingBag className="w-24 h-24 mx-auto text-muted-foreground mb-4" />
-        <h2 className="text-2xl font-extrabold mb-2">{t(lang, "cartEmpty")}</h2>
-        <Link to="/shop" className="inline-block mt-4 btn-3d-gold rounded-xl px-8 py-4 font-bold">
-          {t(lang, "continueShopping")}
-        </Link>
-      </div>
-    );
-  }
-
-  const remaining = Math.max(0, freeShipThreshold - cartTotal);
-  const progress = Math.min(100, (cartTotal / freeShipThreshold) * 100);
-  const total = cartTotal - discount;
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl md:text-4xl font-extrabold mb-6">{t(lang, "cart")}</h1>
-
-      {/* Free shipping bar */}
-      <div className="glass-strong rounded-2xl p-4 mb-6">
-        {remaining > 0 ? (
-          <p className="text-sm font-semibold mb-2">
-            {lang === "ar" ? `أضف ${formatPrice(remaining, lang)} للحصول على شحن مجاني! 🎉` : `Add ${formatPrice(remaining, lang)} more for free shipping! 🎉`}
-          </p>
-        ) : (
-          <p className="text-sm font-bold text-success mb-2">🎉 {lang === "ar" ? "حصلت على شحن مجاني!" : "You unlocked free shipping!"}</p>
-        )}
-        <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-gold transition-all duration-500" style={{ width: `${progress}%` }} />
-        </div>
-      </div>
 
       <div className="grid lg:grid-cols-[1fr_360px] gap-6">
         <div className="space-y-3">
