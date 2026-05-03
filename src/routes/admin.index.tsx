@@ -27,8 +27,8 @@ function AdminDashboard() {
   ];
 
   const statusLabels: Record<string, string> = {
-    pending: "قيد المعالجة", confirmed: "مؤكد", shipped: "تم الشحن",
-    delivered: "تم التسليم", cancelled: "ملغي", returned: "مرتجع",
+    pending: "قيد المعالجة", processing: "جاري التجهيز", shipped: "تم الشحن",
+    delivered: "تم التسليم", cancelled: "ملغي",
   };
 
   return (
