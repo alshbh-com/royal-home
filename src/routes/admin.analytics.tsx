@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, Eye, ShoppingCart, CreditCard, TrendingUp, Users, Package2, Percent } from "lucide-react";
-import { getAnalytics } from "@/server/admin.functions";
+import { getAnalytics } from "@/serverfn/admin.functions";
 
 export const Route = createFileRoute("/admin/analytics")({
   component: AdminAnalyticsPage,

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, Search, Eye, X } from "lucide-react";
 import { toast } from "sonner";
-import { listOrders, getOrder, updateOrderStatus } from "@/server/admin.functions";
+import { listOrders, getOrder, updateOrderStatus } from "@/serverfn/admin.functions";
 import { formatPrice } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin/orders")({

@@ -1,4 +1,4 @@
-import { trackEvent } from "@/server/analytics.functions";
+import { trackEvent } from "@/serverfn/analytics.functions";
 
 const KEY = "royal_session_id";
 

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, Plus, Trash2, Save, X } from "lucide-react";
 import { toast } from "sonner";
-import { listShippingRates, upsertShippingRate, deleteShippingRate } from "@/server/admin.functions";
+import { listShippingRates, upsertShippingRate, deleteShippingRate } from "@/serverfn/admin.functions";
 
 export const Route = createFileRoute("/admin/shipping")({
   component: AdminShippingPage,

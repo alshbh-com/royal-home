@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShoppingBag, Package, DollarSign, Clock, Loader2 } from "lucide-react";
-import { getDashboardStats } from "@/server/admin.functions";
+import { getDashboardStats } from "@/serverfn/admin.functions";
 import { formatPrice } from "@/lib/i18n";
 
 export const Route = createFileRoute("/admin/")({
