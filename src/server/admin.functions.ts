@@ -151,7 +151,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) =>
     z.object({
       id: z.string().uuid(),
-      status: z.enum(["pending", "processing", "shipped", "delivered", "cancelled"]),
+      status: z.enum(["pending", "confirmed", "shipped", "delivered", "cancelled"]),
     }).parse(d)
   )
   .handler(async ({ data }) => {
