@@ -13,14 +13,13 @@ function randomToken() {
   return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-function parseCookie(header: string | null | undefined, name: string): string | null {
-  if (!header) return null;
-  for (const part of header.split(";")) {
-    const [k, ...v] = part.trim().split("=");
-    if (k === name) return decodeURIComponent(v.join("="));
-  }
-  return null;
-}
+const COOKIE_OPTS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none" as const,
+  path: "/",
+  maxAge: SESSION_TTL_HOURS * 3600,
+};
 
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ password: z.string().min(1).max(200) }).parse(d))
