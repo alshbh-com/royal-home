@@ -50,6 +50,8 @@ function AdminLayout() {
     { to: "/admin", label: "لوحة التحكم", icon: LayoutDashboard, exact: true },
     { to: "/admin/orders", label: "الطلبات", icon: ShoppingBag },
     { to: "/admin/products", label: "المنتجات", icon: Package },
+    { to: "/admin/shipping", label: "المحافظات والشحن", icon: Truck },
+    { to: "/admin/analytics", label: "الإحصائيات", icon: BarChart3 },
   ];
 
   return (
