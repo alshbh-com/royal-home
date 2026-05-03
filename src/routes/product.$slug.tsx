@@ -73,6 +73,7 @@ function ProductPage() {
       productId: product.id, name, image: img, price: Number(product.price),
       quantity: qty, selectedColor: color, selectedSize: size, stock: product.stock,
     });
+    track("add_to_cart", { product_id: product.id, metadata: { qty } });
     toast.success(t(lang, "addedToCart"));
   };
 
