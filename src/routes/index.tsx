@@ -6,7 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useApp } from "@/contexts/AppContext";
 import { t } from "@/lib/i18n";
 import { ProductCard } from "@/components/ProductCard";
-import { CountdownTimer } from "@/components/CountdownTimer";
 import type { Tables } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/")({
@@ -22,18 +21,15 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { lang } = useApp();
   const [products, setProducts] = useState<Tables<"products">[]>([]);
-  const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [banners, setBanners] = useState<Tables<"banners">[]>([]);
 
   useEffect(() => {
     (async () => {
-      const [{ data: p }, { data: c }, { data: b }] = await Promise.all([
+      const [{ data: p }, { data: b }] = await Promise.all([
         supabase.from("products").select("*").eq("is_active", true).order("created_at", { ascending: false }).limit(20),
-        supabase.from("categories").select("*").eq("is_active", true).order("sort_order"),
         supabase.from("banners").select("*").eq("is_active", true).eq("position", "hero").order("sort_order"),
       ]);
       setProducts(p ?? []);
-      setCategories(c ?? []);
       setBanners(b ?? []);
     })();
   }, []);
@@ -42,7 +38,6 @@ function HomePage() {
   const newArrivals = products.filter((p) => p.is_new).slice(0, 8);
   const featured = products.filter((p) => p.is_featured).slice(0, 8);
   const heroBanner = banners[0];
-  const dealsEndsAt = new Date(Date.now() + 1000 * 60 * 60 * 36); // 36h
 
   return (
     <div>
