@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Search, Sun, Moon, Globe, Menu, X, Crown } from "lucide-react";
+import { ShoppingCart, Sun, Moon, Globe, Menu, X } from "lucide-react";
+import royalLogo from "@/assets/royal-logo.jpg";
 import { useApp } from "@/contexts/AppContext";
 import { t } from "@/lib/i18n";
 import { useState } from "react";
@@ -14,8 +15,8 @@ export function Header() {
         <div className="flex items-center justify-between h-16 md:h-20 gap-3">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold group-hover:scale-110 transition-transform">
-              <Crown className="w-6 h-6 text-gold-foreground" strokeWidth={2.5} />
+            <div className="w-11 h-11 rounded-xl overflow-hidden bg-primary border border-gold/40 shadow-gold group-hover:scale-110 transition-transform">
+              <img src={royalLogo} alt="Royal" className="w-full h-full object-cover" />
             </div>
             <span className="text-2xl font-extrabold text-gradient-gold tracking-tight">Royal</span>
           </Link>
@@ -27,9 +28,6 @@ export function Header() {
             </Link>
             <Link to="/shop" className="hover:text-gold transition-colors" activeProps={{ className: "text-gold" }}>
               {t(lang, "shop")}
-            </Link>
-            <Link to="/categories" className="hover:text-gold transition-colors" activeProps={{ className: "text-gold" }}>
-              {t(lang, "categories")}
             </Link>
           </nav>
 
@@ -76,7 +74,6 @@ export function Header() {
           <nav className="md:hidden py-4 flex flex-col gap-2 border-t border-border/50">
             <Link to="/" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg hover:bg-accent font-semibold">{t(lang, "home")}</Link>
             <Link to="/shop" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg hover:bg-accent font-semibold">{t(lang, "shop")}</Link>
-            <Link to="/categories" onClick={() => setOpen(false)} className="px-3 py-2 rounded-lg hover:bg-accent font-semibold">{t(lang, "categories")}</Link>
           </nav>
         )}
       </div>

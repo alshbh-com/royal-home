@@ -47,9 +47,10 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" className="dark">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('royal_theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark');}catch(e){}` }} />
       </head>
       <body>
         {children}

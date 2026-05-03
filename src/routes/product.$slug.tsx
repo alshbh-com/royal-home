@@ -234,7 +234,7 @@ function ProductPage() {
 
           <button onClick={() => setShowQuick(!showQuick)}
             disabled={product.stock === 0}
-            className="w-full rounded-xl py-3 font-bold bg-gradient-luxury text-primary-foreground hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50">
+            className="w-full rounded-xl py-3 font-bold bg-gradient-luxury text-white hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 border border-gold/30">
             <Phone className="w-5 h-5" /> {t(lang, "quickOrder")} — {t(lang, "cashOnDelivery")}
           </button>
 
