@@ -79,11 +79,9 @@ function ProductPage() {
 
   const handleBuyNow = () => {
     if (!validate()) return;
-    addToCart({
-      productId: product.id, name, image: img, price: Number(product.price),
-      quantity: qty, selectedColor: color, selectedSize: size, stock: product.stock,
-    });
-    navigate({ to: "/checkout" });
+    // Open quick order modal — does NOT touch the cart, so the order
+    // contains only this product (with the selected color/size/qty).
+    setShowQuick(true);
   };
 
   const submitQuick = async (e: React.FormEvent) => {
