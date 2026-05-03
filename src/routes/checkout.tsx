@@ -6,7 +6,7 @@ import { Truck, Banknote } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
-import { createOrder, validateCoupon } from "@/server/orders.functions";
+import { createOrder, validateCoupon } from "@/serverfn/orders.functions";
 import { track } from "@/lib/analytics";
 import type { Tables } from "@/integrations/supabase/types";
 

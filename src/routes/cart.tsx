@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
-import { validateCoupon } from "@/server/orders.functions";
+import { validateCoupon } from "@/serverfn/orders.functions";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,

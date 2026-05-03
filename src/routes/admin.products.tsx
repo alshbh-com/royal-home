@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, Plus, Pencil, Trash2, X, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { listProducts, upsertProduct, deleteProduct, listCategoriesAdmin } from "@/server/admin.functions";
+import { listProducts, upsertProduct, deleteProduct, listCategoriesAdmin } from "@/serverfn/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/i18n";
 

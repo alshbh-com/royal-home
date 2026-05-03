@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Lock, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import royalLogo from "@/assets/royal-logo.jpg";
-import { adminLogin } from "@/server/admin.functions";
+import { adminLogin } from "@/serverfn/admin.functions";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
