@@ -7,6 +7,7 @@ import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
 import { ProductCard } from "@/components/ProductCard";
 import { createOrder } from "@/server/orders.functions";
+import { track } from "@/lib/analytics";
 import type { Tables } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/product/$slug")({
