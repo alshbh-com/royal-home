@@ -67,6 +67,7 @@ function CheckoutPage() {
           })),
         },
       });
+      track("purchase", { metadata: { order_number: result.order_number, total: result.final_price } });
       clearCart();
       navigate({ to: "/order-success/$orderNumber", params: { orderNumber: result.order_number } });
     } catch (err: any) {
