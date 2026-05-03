@@ -8,6 +8,7 @@ type P = Tables<"products">;
 
 export function ProductCard({ product }: { product: P }) {
   const { lang, addToCart } = useApp();
+  const navigate = useNavigate();
   const name = lang === "ar" ? product.name_ar : product.name_en;
   const images = (product.images as string[] | null) ?? [];
   const img = images[0] ?? "https://placehold.co/600x600?text=Royal";
