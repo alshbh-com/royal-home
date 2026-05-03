@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Search, Sun, Moon, Globe, Menu, X, Crown } from "lucide-react";
+import { ShoppingCart, Sun, Moon, Globe, Menu, X } from "lucide-react";
+import royalLogo from "@/assets/royal-logo.jpg";
 import { useApp } from "@/contexts/AppContext";
 import { t } from "@/lib/i18n";
 import { useState } from "react";
