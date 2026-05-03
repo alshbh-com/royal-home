@@ -527,7 +527,7 @@ export type Database = {
       discount_type: "percentage" | "fixed"
       order_status:
         | "pending"
-        | "processing"
+        | "confirmed"
         | "shipped"
         | "delivered"
         | "cancelled"
@@ -661,7 +661,7 @@ export const Constants = {
       discount_type: ["percentage", "fixed"],
       order_status: [
         "pending",
-        "processing",
+        "confirmed",
         "shipped",
         "delivered",
         "cancelled",
