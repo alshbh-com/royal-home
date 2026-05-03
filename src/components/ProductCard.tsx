@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Star, ShoppingCart, Sparkles } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
@@ -8,6 +8,7 @@ type P = Tables<"products">;
 
 export function ProductCard({ product }: { product: P }) {
   const { lang, addToCart } = useApp();
+  const navigate = useNavigate();
   const name = lang === "ar" ? product.name_ar : product.name_en;
   const images = (product.images as string[] | null) ?? [];
   const img = images[0] ?? "https://placehold.co/600x600?text=Royal";
@@ -88,6 +89,14 @@ export function ProductCard({ product }: { product: P }) {
           onClick={(e) => {
             e.preventDefault();
             if (product.stock === 0) return;
+            const colors = (product.colors as string[] | null) ?? [];
+            const sizes = (product.sizes as string[] | null) ?? [];
+            // If product has variants, force user to pick them on the product page
+            // so we never add the wrong color/size to the cart.
+            if (colors.length > 0 || sizes.length > 0) {
+              navigate({ to: "/product/$slug", params: { slug: product.slug } });
+              return;
+            }
             addToCart({
               productId: product.id,
               name,
