@@ -7,13 +7,13 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const NAV = [
+const NAV: { to: "/admin" | "/admin/orders" | "/admin/products" | "/admin/shipping" | "/admin/analytics"; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/admin", label: "الرئيسية", icon: LayoutDashboard, exact: true },
   { to: "/admin/orders", label: "الطلبات", icon: ShoppingBag },
   { to: "/admin/products", label: "المنتجات", icon: Package },
   { to: "/admin/shipping", label: "الشحن", icon: Truck },
   { to: "/admin/analytics", label: "إحصائيات", icon: BarChart3 },
-] as const;
+];
 
 function AdminLayout() {
   const navigate = useNavigate();
