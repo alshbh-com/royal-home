@@ -29,7 +29,9 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (cart.length === 0) navigate({ to: "/cart" });
-  }, [cart.length, navigate]);
+    else track("begin_checkout", { metadata: { items: cart.length, total: cartTotal } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -65,6 +67,7 @@ function CheckoutPage() {
           })),
         },
       });
+      track("purchase", { metadata: { order_number: result.order_number, total: result.final_price } });
       clearCart();
       navigate({ to: "/order-success/$orderNumber", params: { orderNumber: result.order_number } });
     } catch (err: any) {
