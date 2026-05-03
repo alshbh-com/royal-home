@@ -18,7 +18,7 @@ export function CountdownTimer({ endsAt }: { endsAt: Date }) {
 
   const Box = ({ v, label }: { v: number; label: string }) => (
     <div className="flex flex-col items-center">
-      <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-luxury text-primary-foreground flex items-center justify-center text-2xl md:text-3xl font-extrabold shadow-luxury border border-gold/30">
+      <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-luxury text-white flex items-center justify-center text-2xl md:text-3xl font-extrabold shadow-luxury border border-gold/30">
         {String(v).padStart(2, "0")}
       </div>
       <span className="text-xs mt-1 font-semibold opacity-70">{label}</span>

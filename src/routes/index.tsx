@@ -42,7 +42,7 @@ function HomePage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
+      <section className="relative overflow-hidden bg-gradient-hero text-white">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-10 -start-10 w-72 h-72 rounded-full bg-gold/30 blur-3xl animate-float" />
           <div className="absolute bottom-10 -end-10 w-96 h-96 rounded-full bg-success/20 blur-3xl" />

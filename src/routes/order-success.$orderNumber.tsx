@@ -21,7 +21,7 @@ function SuccessPage() {
         <h1 className="text-3xl md:text-4xl font-extrabold mb-3">{t(lang, "orderSuccess")}</h1>
         <p className="text-muted-foreground mb-6">{t(lang, "orderSuccessMsg")}</p>
 
-        <div className="bg-gradient-luxury text-primary-foreground rounded-2xl p-5 mb-6">
+        <div className="bg-gradient-luxury text-white rounded-2xl p-5 mb-6">
           <div className="text-sm opacity-80">{t(lang, "orderNumber")}</div>
           <div className="text-2xl md:text-3xl font-extrabold text-gradient-gold mt-1 tracking-wider">{orderNumber}</div>
         </div>
