@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Star, ShoppingCart, Sparkles } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { t, formatPrice } from "@/lib/i18n";
