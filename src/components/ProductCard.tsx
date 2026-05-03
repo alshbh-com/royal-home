@@ -89,6 +89,14 @@ export function ProductCard({ product }: { product: P }) {
           onClick={(e) => {
             e.preventDefault();
             if (product.stock === 0) return;
+            const colors = (product.colors as string[] | null) ?? [];
+            const sizes = (product.sizes as string[] | null) ?? [];
+            // If product has variants, force user to pick them on the product page
+            // so we never add the wrong color/size to the cart.
+            if (colors.length > 0 || sizes.length > 0) {
+              navigate({ to: "/product/$slug", params: { slug: product.slug } });
+              return;
+            }
             addToCart({
               productId: product.id,
               name,
