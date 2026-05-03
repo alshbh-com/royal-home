@@ -20,6 +20,42 @@ function CartPage() {
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [validating, setValidating] = useState(false);
 
+  const apply = async () => {
+    if (!coupon.trim()) return;
+    setValidating(true);
+    try {
+      const r = await validateCoupon({ data: { code: coupon.trim(), subtotal: cartTotal } });
+      if (r.valid) {
+        setDiscount(r.discount ?? 0);
+        setAppliedCode(r.code ?? null);
+        toast.success(t(lang, "couponApplied"));
+      } else {
+        toast.error(t(lang, "couponInvalid"));
+        setDiscount(0); setAppliedCode(null);
+      }
+    } catch {
+      toast.error(t(lang, "couponInvalid"));
+    } finally { setValidating(false); }
+  };
+
+  if (cart.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <ShoppingBag className="w-24 h-24 mx-auto text-muted-foreground mb-4" />
+        <h2 className="text-2xl font-extrabold mb-2">{t(lang, "cartEmpty")}</h2>
+        <Link to="/shop" className="inline-block mt-4 btn-3d-gold rounded-xl px-8 py-4 font-bold">
+          {t(lang, "continueShopping")}
+        </Link>
+      </div>
+    );
+  }
+
+  const total = cartTotal - discount;
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl md:text-4xl font-extrabold mb-6">{t(lang, "cart")}</h1>
+
       <div className="grid lg:grid-cols-[1fr_360px] gap-6">
         <div className="space-y-3">
           {cart.map((item) => (
