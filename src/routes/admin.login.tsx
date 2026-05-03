@@ -20,10 +20,10 @@ function AdminLoginPage() {
     try {
       await adminLogin({ data: { password } });
       toast.success("تم تسجيل الدخول");
-      navigate({ to: "/admin" });
+      // Hard navigation to ensure cookie is sent on the next request
+      window.location.href = "/admin";
     } catch (err: any) {
       toast.error(err?.message ?? "كلمة مرور خاطئة");
-    } finally {
       setLoading(false);
     }
   };

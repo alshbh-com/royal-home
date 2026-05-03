@@ -1,5 +1,5 @@
 import { createServerFn, createMiddleware } from "@tanstack/react-start";
-import { getRequestIP, getRequestHeader, setResponseHeaders } from "@tanstack/react-start/server";
+import { getRequestIP, getCookie, setCookie, deleteCookie } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
@@ -13,14 +13,13 @@ function randomToken() {
   return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-function parseCookie(header: string | null | undefined, name: string): string | null {
-  if (!header) return null;
-  for (const part of header.split(";")) {
-    const [k, ...v] = part.trim().split("=");
-    if (k === name) return decodeURIComponent(v.join("="));
-  }
-  return null;
-}
+const COOKIE_OPTS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none" as const,
+  path: "/",
+  maxAge: SESSION_TTL_HOURS * 3600,
+};
 
 export const adminLogin = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ password: z.string().min(1).max(200) }).parse(d))
@@ -55,27 +54,21 @@ export const adminLogin = createServerFn({ method: "POST" })
       ip_address: ip,
     });
 
-    setResponseHeaders(new Headers({
-      "Set-Cookie": `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=${SESSION_TTL_HOURS * 3600}`,
-    }));
+    setCookie(SESSION_COOKIE, token, COOKIE_OPTS);
     return { ok: true };
   });
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
-  const cookieHeader = getRequestHeader("cookie");
-  const token = parseCookie(cookieHeader, SESSION_COOKIE);
+  const token = getCookie(SESSION_COOKIE);
   if (token) {
     await supabaseAdmin.from("admin_sessions").delete().eq("token", token);
   }
-  setResponseHeaders(new Headers({
-    "Set-Cookie": `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=0`,
-  }));
+  deleteCookie(SESSION_COOKIE, { path: "/", sameSite: "none", secure: true });
   return { ok: true };
 });
 
 async function verifyAdmin(): Promise<boolean> {
-  const cookieHeader = getRequestHeader("cookie");
-  const token = parseCookie(cookieHeader, SESSION_COOKIE);
+  const token = getCookie(SESSION_COOKIE);
   if (!token) return false;
   const { data } = await supabaseAdmin
     .from("admin_sessions")
