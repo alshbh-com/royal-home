@@ -9,14 +9,14 @@ export const Route = createFileRoute("/admin/orders")({
   component: AdminOrdersPage,
 });
 
-const STATUSES = ["pending", "processing", "shipped", "delivered", "cancelled"] as const;
+const STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"] as const;
 const statusLabels: Record<string, string> = {
-  pending: "قيد المعالجة", processing: "جاري التجهيز", shipped: "تم الشحن",
+  pending: "قيد المعالجة", confirmed: "تم التأكيد", shipped: "تم الشحن",
   delivered: "تم التسليم", cancelled: "ملغي",
 };
 const statusColors: Record<string, string> = {
   pending: "bg-amber-500/15 text-amber-500",
-  processing: "bg-blue-500/15 text-blue-500",
+  confirmed: "bg-blue-500/15 text-blue-500",
   shipped: "bg-indigo-500/15 text-indigo-500",
   delivered: "bg-success/15 text-success",
   cancelled: "bg-destructive/15 text-destructive",
