@@ -63,6 +63,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    if (!pathname.startsWith("/admin")) track("page_view", { path: pathname });
+  }, [pathname]);
   return (
     <AppProvider>
       <div className="min-h-screen flex flex-col bg-background text-foreground">
