@@ -27,7 +27,7 @@ function CategoriesPage() {
             key={c.id}
             to="/shop"
             search={{ category: c.slug }}
-            className="group relative aspect-square rounded-3xl bg-gradient-luxury text-primary-foreground p-6 overflow-hidden hover:shadow-luxury transition-all hover:scale-105 flex flex-col items-center justify-center gap-3 border border-gold/20"
+            className="group relative aspect-square rounded-3xl bg-gradient-luxury text-white p-6 overflow-hidden hover:shadow-luxury transition-all hover:scale-105 flex flex-col items-center justify-center gap-3 border border-gold/20"
           >
             <div className="text-6xl group-hover:scale-110 transition-transform">
               {c.slug === "kitchen" && "🍳"}
