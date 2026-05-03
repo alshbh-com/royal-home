@@ -1,8 +1,10 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppProvider } from "@/contexts/AppContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "sonner";
+import { track } from "@/lib/analytics";
 
 import appCss from "../styles.css?url";
 
@@ -61,6 +63,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    if (!pathname.startsWith("/admin")) track("page_view", { path: pathname });
+  }, [pathname]);
   return (
     <AppProvider>
       <div className="min-h-screen flex flex-col bg-background text-foreground">

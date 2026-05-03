@@ -211,3 +211,121 @@ export const listCategoriesAdmin = createServerFn({ method: "GET" })
     const { data } = await supabaseAdmin.from("categories").select("*").order("sort_order");
     return data ?? [];
   });
+
+// ============= SHIPPING (GOVERNORATES) =============
+export const listShippingRates = createServerFn({ method: "GET" })
+  .middleware([requireAdmin])
+  .handler(async () => {
+    const { data, error } = await supabaseAdmin.from("shipping_rates").select("*").order("governorate");
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const shippingSchema = z.object({
+  id: z.string().uuid().optional(),
+  governorate: z.string().trim().min(2).max(80),
+  price: z.number().nonnegative(),
+  delivery_days: z.string().max(50).nullable().optional(),
+  is_active: z.boolean().default(true),
+});
+
+export const upsertShippingRate = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((d: unknown) => shippingSchema.parse(d))
+  .handler(async ({ data }) => {
+    if (data.id) {
+      const { error } = await supabaseAdmin.from("shipping_rates").update({
+        governorate: data.governorate,
+        price: data.price,
+        delivery_days: data.delivery_days ?? null,
+        is_active: data.is_active,
+      }).eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { id: data.id };
+    }
+    const { data: row, error } = await supabaseAdmin.from("shipping_rates").insert({
+      governorate: data.governorate,
+      price: data.price,
+      delivery_days: data.delivery_days ?? null,
+      is_active: data.is_active,
+    }).select("id").single();
+    if (error) throw new Error(error.message);
+    return { id: row.id };
+  });
+
+export const deleteShippingRate = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin.from("shipping_rates").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============= ANALYTICS =============
+export const getAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireAdmin])
+  .inputValidator((d: unknown) => z.object({ days: z.number().int().min(1).max(365).default(30) }).parse(d ?? {}))
+  .handler(async ({ data }) => {
+    const since = new Date(Date.now() - data.days * 86400 * 1000).toISOString();
+
+    const [{ data: events }, { count: ordersCount }] = await Promise.all([
+      supabaseAdmin.from("analytics_events").select("event_type, session_id, product_id, created_at").gte("created_at", since).limit(50000),
+      supabaseAdmin.from("orders").select("*", { count: "exact", head: true }).gte("created_at", since),
+    ]);
+
+    const evs = events ?? [];
+    const sessions = new Set(evs.map((e) => e.session_id));
+    const pageViews = evs.filter((e) => e.event_type === "page_view").length;
+    const productViewSessions = new Set(evs.filter((e) => e.event_type === "product_view").map((e) => e.session_id));
+    const addToCartSessions = new Set(evs.filter((e) => e.event_type === "add_to_cart").map((e) => e.session_id));
+    const checkoutSessions = new Set(evs.filter((e) => e.event_type === "begin_checkout").map((e) => e.session_id));
+    const purchaseSessions = new Set(evs.filter((e) => e.event_type === "purchase").map((e) => e.session_id));
+
+    const abandoned = [...checkoutSessions].filter((s) => !purchaseSessions.has(s)).length;
+    const totalSessions = sessions.size;
+    const conversionRate = totalSessions > 0 ? (purchaseSessions.size / totalSessions) * 100 : 0;
+
+    const productViews: Record<string, number> = {};
+    for (const e of evs) {
+      if (e.event_type === "product_view" && e.product_id) {
+        productViews[e.product_id] = (productViews[e.product_id] ?? 0) + 1;
+      }
+    }
+    const topIds = Object.entries(productViews).sort((a, b) => b[1] - a[1]).slice(0, 10);
+    let topProducts: Array<{ id: string; name_ar: string; views: number }> = [];
+    if (topIds.length > 0) {
+      const { data: prods } = await supabaseAdmin.from("products").select("id, name_ar").in("id", topIds.map(([id]) => id));
+      topProducts = topIds.map(([id, views]) => ({
+        id,
+        name_ar: prods?.find((p) => p.id === id)?.name_ar ?? "—",
+        views,
+      }));
+    }
+
+    const dayMap: Record<string, { sessions: Set<string>; views: number; orders: number }> = {};
+    for (const e of evs) {
+      const day = new Date(e.created_at).toISOString().slice(0, 10);
+      dayMap[day] ??= { sessions: new Set(), views: 0, orders: 0 };
+      dayMap[day].sessions.add(e.session_id);
+      if (e.event_type === "page_view") dayMap[day].views++;
+      if (e.event_type === "purchase") dayMap[day].orders++;
+    }
+    const daily = Object.entries(dayMap)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([day, v]) => ({ day, sessions: v.sessions.size, views: v.views, orders: v.orders }));
+
+    return {
+      totalSessions,
+      pageViews,
+      productViewSessions: productViewSessions.size,
+      addToCartSessions: addToCartSessions.size,
+      checkoutSessions: checkoutSessions.size,
+      purchaseSessions: purchaseSessions.size,
+      abandoned,
+      conversionRate: Math.round(conversionRate * 100) / 100,
+      ordersCount: ordersCount ?? 0,
+      topProducts,
+      daily,
+    };
+  });
