@@ -29,7 +29,9 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (cart.length === 0) navigate({ to: "/cart" });
-  }, [cart.length, navigate]);
+    else track("begin_checkout", { metadata: { items: cart.length, total: cartTotal } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     (async () => {
