@@ -91,14 +91,7 @@ export const createOrder = createServerFn({ method: "POST" })
       .select("price")
       .eq("governorate", data.governorate)
       .maybeSingle();
-    const { data: freeShipSetting } = await supabaseAdmin
-      .from("settings")
-      .select("value")
-      .eq("key", "free_shipping_threshold")
-      .maybeSingle();
-    const freeShipThreshold = Number(freeShipSetting?.value ?? 0);
-    let shipping = rate ? Number(rate.price) : 60;
-    if (freeShipThreshold > 0 && total >= freeShipThreshold) shipping = 0;
+    const shipping = rate ? Number(rate.price) : 60;
 
     // Coupon
     let discount = 0;
