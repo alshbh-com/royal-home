@@ -22,7 +22,6 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [rates, setRates] = useState<Tables<"shipping_rates">[]>([]);
-  const [freeShipThreshold, setFreeShipThreshold] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [discount, setDiscount] = useState(0);
   const [form, setForm] = useState({ customer_name: "", phone: "", governorate: "", address: "", notes: "" });
@@ -33,12 +32,8 @@ function CheckoutPage() {
 
   useEffect(() => {
     (async () => {
-      const [{ data: r }, { data: s }] = await Promise.all([
-        supabase.from("shipping_rates").select("*").eq("is_active", true).order("governorate"),
-        supabase.from("settings").select("value").eq("key", "free_shipping_threshold").maybeSingle(),
-      ]);
+      const { data: r } = await supabase.from("shipping_rates").select("*").eq("is_active", true).order("governorate");
       setRates(r ?? []);
-      if (s) setFreeShipThreshold(Number(s.value));
       if (search.coupon) {
         const v = await validateCoupon({ data: { code: search.coupon, subtotal: cartTotal } });
         if (v.valid) setDiscount(v.discount ?? 0);
@@ -48,8 +43,7 @@ function CheckoutPage() {
   }, []);
 
   const govRate = rates.find((r) => r.governorate === form.governorate);
-  let shipping = govRate ? Number(govRate.price) : 0;
-  if (freeShipThreshold > 0 && cartTotal >= freeShipThreshold) shipping = 0;
+  const shipping = govRate ? Number(govRate.price) : 0;
   const total = Math.max(0, cartTotal + shipping - discount);
 
   const submit = async (e: React.FormEvent) => {
