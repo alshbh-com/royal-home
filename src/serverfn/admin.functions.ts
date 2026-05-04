@@ -172,7 +172,7 @@ const productSchema = z.object({
   price: z.number().nonnegative(),
   compare_at_price: z.number().nonnegative().nullable().optional(),
   stock: z.number().int().nonnegative(),
-  category_id: z.string().uuid().nullable().optional(),
+  category_id: z.preprocess((v) => (v === "" || v === undefined ? null : v), z.string().uuid().nullable()),
   images: z.array(z.string()).default([]),
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),
