@@ -185,6 +185,10 @@ const productSchema = z.object({
   is_featured: z.boolean().default(false),
   is_bestseller: z.boolean().default(false),
   is_new: z.boolean().default(false),
+  quantity_offers: z.array(z.object({
+    quantity: z.number().int().min(2),
+    price: z.number().nonnegative(),
+  })).default([]),
 });
 
 export const upsertProduct = createServerFn({ method: "POST" })

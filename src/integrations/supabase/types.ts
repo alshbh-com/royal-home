@@ -392,6 +392,7 @@ export type Database = {
           name_ar: string
           name_en: string
           price: number
+          quantity_offers: Json
           rating: number
           reviews_count: number
           sales_count: number
@@ -422,6 +423,7 @@ export type Database = {
           name_ar: string
           name_en: string
           price: number
+          quantity_offers?: Json
           rating?: number
           reviews_count?: number
           sales_count?: number
@@ -452,6 +454,7 @@ export type Database = {
           name_ar?: string
           name_en?: string
           price?: number
+          quantity_offers?: Json
           rating?: number
           reviews_count?: number
           sales_count?: number
