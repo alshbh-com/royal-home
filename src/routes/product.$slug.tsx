@@ -102,7 +102,7 @@ function ProductPage() {
         data: {
           ...form,
           items: [{
-            productId: product.id, name, image: img, price: Number(product.price),
+            productId: product.id, name, image: img, price: unitPrice,
             quantity: qty, selectedColor: color, selectedSize: size,
           }],
         },
