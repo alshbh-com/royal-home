@@ -108,6 +108,7 @@ function ProductEditor({ initial, categories, onClose, onSaved }:
     is_featured: initial.is_featured ?? false,
     is_bestseller: initial.is_bestseller ?? false,
     is_new: initial.is_new ?? false,
+    quantity_offers: ((initial as any).quantity_offers ?? []) as { quantity: number; price: number }[],
   });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
