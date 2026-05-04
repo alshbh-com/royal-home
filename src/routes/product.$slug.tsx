@@ -76,7 +76,7 @@ function ProductPage() {
   const handleAdd = () => {
     if (!validate()) return;
     addToCart({
-      productId: product.id, name, image: img, price: Number(product.price),
+      productId: product.id, name, image: img, price: unitPrice,
       quantity: qty, selectedColor: color, selectedSize: size, stock: product.stock,
     });
     track("add_to_cart", { product_id: product.id, metadata: { qty } });
