@@ -133,7 +133,8 @@ function ProductEditor({ initial, categories, onClose, onSaved }:
     e.preventDefault();
     setSaving(true);
     try {
-      await upsertProduct({ data: { ...form, slug: form.slug || slugify(form.name_en || form.name_ar) } as any });
+      const validCategory = categories.some((category) => category.id === form.category_id) ? form.category_id : null;
+      await upsertProduct({ data: { ...form, category_id: validCategory, slug: form.slug || slugify(form.name_en || form.name_ar) } as any });
       toast.success("تم الحفظ");
       onSaved();
     } catch (err: any) { toast.error(err.message); }

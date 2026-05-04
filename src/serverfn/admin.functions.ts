@@ -162,6 +162,13 @@ export const listProducts = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+const normalizeOptionalUuid = (value: unknown) => {
+  if (value === "" || value === undefined || value === null) return null;
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return z.string().uuid().safeParse(trimmed).success ? trimmed : null;
+};
+
 const productSchema = z.object({
   id: z.string().uuid().optional(),
   name_ar: z.string().min(1).max(200),
@@ -172,14 +179,7 @@ const productSchema = z.object({
   price: z.number().nonnegative(),
   compare_at_price: z.number().nonnegative().nullable().optional(),
   stock: z.number().int().nonnegative(),
-  category_id: z.preprocess(
-    (v) => {
-      if (v === "" || v === undefined || v === null) return null;
-      if (typeof v === "string" && !/^[0-9a-fA-F-]{36}$/.test(v)) return null;
-      return v;
-    },
-    z.string().uuid().nullable()
-  ),
+  category_id: z.preprocess(normalizeOptionalUuid, z.string().uuid().nullable()),
   images: z.array(z.string()).default([]),
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),
