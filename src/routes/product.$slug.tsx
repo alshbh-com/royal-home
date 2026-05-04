@@ -60,6 +60,12 @@ function ProductPage() {
   const sizes = (product.sizes as string[] | null) ?? [];
   const hasDiscount = product.compare_at_price && Number(product.compare_at_price) > Number(product.price);
   const lowStock = product.stock > 0 && product.stock <= product.low_stock_threshold;
+  const quantityOffers = (((product as any).quantity_offers as { quantity: number; price: number }[] | null) ?? [])
+    .slice().sort((a, b) => a.quantity - b.quantity);
+  // Pick the best matching offer for the chosen qty (largest qty <= selected qty).
+  const matchedOffer = quantityOffers.filter((o) => qty >= o.quantity).pop();
+  const unitPrice = matchedOffer ? matchedOffer.price / matchedOffer.quantity : Number(product.price);
+  const lineTotal = matchedOffer && qty === matchedOffer.quantity ? matchedOffer.price : unitPrice * qty;
 
   const validate = (): boolean => {
     if (colors.length > 0 && !color) { toast.error(t(lang, "pleaseSelectColor")); return false; }
