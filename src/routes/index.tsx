@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
     ]);
     return { products: (p ?? []) as Tables<"products">[], banners: (b ?? []) as Tables<"banners">[] };
   },
-  staleTime: 60_000,
+  staleTime: 0,
   errorComponent: ({ error }) => <div className="container mx-auto p-8 text-center">{error.message}</div>,
   notFoundComponent: () => <div className="container mx-auto p-8 text-center">Not found</div>,
   head: () => ({
@@ -31,9 +31,6 @@ function HomePage() {
   const { lang } = useApp();
   const { products, banners } = Route.useLoaderData();
 
-  const bestSellers = products.filter((p: Tables<"products">) => p.is_bestseller).slice(0, 8);
-  const newArrivals = products.filter((p: Tables<"products">) => p.is_new).slice(0, 8);
-  const featured = products.filter((p: Tables<"products">) => p.is_featured).slice(0, 8);
   const heroBanner = banners[0];
 
   return (
@@ -81,12 +78,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* BEST SELLERS */}
-      <ProductSection title={t(lang, "bestSellers")} products={bestSellers} />
-      {/* NEW */}
-      <ProductSection title={t(lang, "newArrivals")} products={newArrivals} />
-      {/* FEATURED */}
-      <ProductSection title={t(lang, "featured")} products={featured} />
+      <ProductSection title={t(lang, "shop")} products={products} />
     </div>
   );
 }
