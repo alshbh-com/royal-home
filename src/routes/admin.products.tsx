@@ -191,6 +191,48 @@ function ProductEditor({ initial, categories, onClose, onSaved }:
               </label>
             </div>
           </div>
+          <div className="col-span-2 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-muted-foreground">عروض الكمية (سعر مختلف لكل عدد قطع)</label>
+              <button type="button"
+                onClick={() => setForm({ ...form, quantity_offers: [...form.quantity_offers, { quantity: form.quantity_offers.length + 2, price: form.price }] })}
+                className="text-xs px-3 py-1.5 rounded-lg bg-gold/15 text-gold font-bold flex items-center gap-1">
+                <Plus className="w-3.5 h-3.5" /> إضافة عرض
+              </button>
+            </div>
+            {form.quantity_offers.length === 0 && (
+              <div className="text-xs text-muted-foreground">لا توجد عروض. اضغط "إضافة عرض" لتحديد سعر لكل ٢ قطعة، ٣ قطع... إلخ.</div>
+            )}
+            {form.quantity_offers.map((offer, idx) => (
+              <div key={idx} className="flex items-end gap-2">
+                <div className="flex-1">
+                  <label className="text-[11px] text-muted-foreground">عدد القطع</label>
+                  <input type="number" min={2} value={offer.quantity}
+                    onChange={(e) => {
+                      const v = [...form.quantity_offers];
+                      v[idx] = { ...v[idx], quantity: Number(e.target.value) };
+                      setForm({ ...form, quantity_offers: v });
+                    }}
+                    className="w-full mt-1 px-3 py-2 rounded-xl bg-card border border-border focus:border-gold outline-none" />
+                </div>
+                <div className="flex-1">
+                  <label className="text-[11px] text-muted-foreground">السعر الإجمالي</label>
+                  <input type="number" min={0} value={offer.price}
+                    onChange={(e) => {
+                      const v = [...form.quantity_offers];
+                      v[idx] = { ...v[idx], price: Number(e.target.value) };
+                      setForm({ ...form, quantity_offers: v });
+                    }}
+                    className="w-full mt-1 px-3 py-2 rounded-xl bg-card border border-border focus:border-gold outline-none" />
+                </div>
+                <button type="button"
+                  onClick={() => setForm({ ...form, quantity_offers: form.quantity_offers.filter((_, i) => i !== idx) })}
+                  className="p-2 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
           <div className="col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2">
             {([
               ["is_active", "نشط"], ["is_featured", "مميز"],
