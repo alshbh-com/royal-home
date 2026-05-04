@@ -167,11 +167,40 @@ function ProductPage() {
           )}
 
           <div className="flex items-baseline gap-3 flex-wrap">
-            <span className="text-4xl font-extrabold text-gold">{formatPrice(Number(product.price), lang)}</span>
-            {hasDiscount && (
+            <span className="text-4xl font-extrabold text-gold">{formatPrice(lineTotal, lang)}</span>
+            {matchedOffer && (
+              <span className="text-sm text-muted-foreground">
+                ({formatPrice(unitPrice, lang)} / {lang === "ar" ? "قطعة" : "piece"})
+              </span>
+            )}
+            {!matchedOffer && hasDiscount && (
               <span className="text-lg text-muted-foreground line-through">{formatPrice(Number(product.compare_at_price), lang)}</span>
             )}
           </div>
+
+          {quantityOffers.length > 0 && (
+            <div className="space-y-2">
+              <div className="font-bold text-sm">{lang === "ar" ? "عروض الكميات 🎁" : "Bundle deals 🎁"}</div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {quantityOffers.map((o, i) => {
+                  const active = qty === o.quantity;
+                  const savePerUnit = Number(product.price) - o.price / o.quantity;
+                  return (
+                    <button key={i} type="button" onClick={() => setQty(Math.min(product.stock, o.quantity))}
+                      className={`text-start rounded-xl border-2 p-3 transition-all ${active ? "border-gold bg-gold/10" : "border-border hover:border-gold/50"}`}>
+                      <div className="font-extrabold">{o.quantity} {lang === "ar" ? "قطع" : "pcs"}</div>
+                      <div className="text-gold font-bold">{formatPrice(o.price, lang)}</div>
+                      {savePerUnit > 0 && (
+                        <div className="text-[11px] text-success font-bold">
+                          {lang === "ar" ? `وفّر ${formatPrice(savePerUnit, lang)} للقطعة` : `Save ${formatPrice(savePerUnit, lang)}/pc`}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {product.stock > 0 ? (
             <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-sm ${lowStock ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}`}>
