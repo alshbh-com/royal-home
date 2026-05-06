@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { AppProvider } from "@/contexts/AppContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Toaster } from "sonner";
 import { track } from "@/lib/analytics";
 
@@ -79,6 +80,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <WhatsAppButton />
       </div>
       <Toaster position="top-center" richColors />
     </AppProvider>
